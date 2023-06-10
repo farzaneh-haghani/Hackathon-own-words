@@ -9,21 +9,22 @@ function App() {
   const [rephrase, setRephrase] = useState(false);
 
   const wordHandler = (e) => {
+    setHighlight({});
     setWord(true);
     setSentence(false);
-    console.log(word, sentence)
   }
 
   const sentenceHandler = (e) => {
+    setHighlight({});
     setWord(false);
     setSentence(true);
-    console.log(word, sentence)
   }
+
   const clickHandler = (e) => {
     e.preventDefault();
     setRephrase(true);
   }
-  console.log(highlight)
+
   return (
     <div className="App">
       <h1>In Your Own Words</h1>
@@ -33,22 +34,33 @@ function App() {
       <input type='radio' id='sentence' name='type' onChange={sentenceHandler} checked={sentence} ></input>
       <label for="sentence">Sentence</label>
 
-      <h3>Please enter your text!</h3>
+
       <div className='flex'>
-        <textarea rows={20} cols={50} onChange={(e) => setText(e.target.value)}></textarea>
+        <div>
+          <h3>Please enter your text!</h3>
+          <textarea rows={20} cols={50} onChange={(e) => setText(e.target.value)}></textarea>
+        </div>
         <button onClick={clickHandler}>Rephrasing</button>
         <div className='result'>
-          {rephrase && text.split(" ").map((eachWord, index) =>
+          {rephrase && word ? text.split(" ").map((eachWord, index) =>
             <>
-              <span style={highlight[index] ? { backgroundColor: "yellow" } : { backgroundColor: "white" }} onClick={() => setHighlight({ ...highlight, [index]: !highlight[index] })}>{eachWord}</span>
-              <span> </span>
+              <span style={highlight[index] ? { backgroundColor: "yellow" } : { backgroundColor: "transparent" }}
+                onClick={() => setHighlight({ ...highlight, [index]: !highlight[index] })}>
+                {eachWord}
+              </span>
+              <span style={{ backgroundColor: "transparent" }}> </span>
+            </>
+          ) : rephrase && sentence && text.split(".").map((eachWord, index) =>
+            <>
+              <span style={highlight[index] ? { backgroundColor: "lightcoral" } : { backgroundColor: "transparent" }}
+                onClick={() => setHighlight({ ...highlight, [index]: !highlight[index] })}> {eachWord}</span >
+              <span style={{ backgroundColor: "transparent" }}>. </span>
             </>
           )}
         </div >
       </div>
-    </div>
+    </div >
   )
-
 }
 
 export default App;
